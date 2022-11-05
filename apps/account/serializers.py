@@ -1,8 +1,6 @@
 import email
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
-from django.conf import settings
+from django.contrib.auth import get_user_model, authenticate
 
 from .tasks import send_activation_code
 
@@ -51,3 +49,30 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         send_activation_code.delay(user.email, user.activation_code)
         return user
 
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=100)
+    password = serializers.CharField(max_length=128)
+
+    def validate_username(self, username):
+        if not User.objects.filter(username=username).exists():
+            raise serializers.ValidationError('Пользователя с указанным ником не существует')
+        return username
+    
+    def validate(self, attrs):
+        # print('*' * 20, self.context)
+        request = self.context.get('request')
+        username = attrs.get('username')
+        password = attrs.get('password')
+        if username and password:
+            user = authenticate(
+                username=username,
+                password=password,
+                request=request
+            )
+            if not user:
+                raise serializers.ValidationError('Неправильный username или пароль')
+        else:
+            raise serializers.ValidationError('Заполните все поля')
+        attrs['user'] = user
+        return attrs

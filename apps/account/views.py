@@ -3,9 +3,12 @@ from django.contrib.auth import get_user_model
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 
-from .serializers import UserRegistrationSerializer
+from .serializers import UserRegistrationSerializer, LoginSerializer
 
 User = get_user_model()
 
@@ -36,5 +39,13 @@ class AccountActivationView(APIView):
             'Account activated! You can login now',
             status=status.HTTP_200_OK
         )
+
+
+
+
+
+
+
+
 
 

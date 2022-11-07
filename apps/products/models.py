@@ -20,7 +20,7 @@ class Products(models.Model):
     title = models.CharField(max_length=150)
     slug = models.SlugField(max_length=170, primary_key=True, blank=True)
     description = models.TextField()
-    image = models.ImageField(upload_to='post_images')
+    image = models.ImageField(upload_to='post_images', max_length=200)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -42,7 +42,7 @@ class Products(models.Model):
 class ProductsImage(models.Model):
     image = models.ImageField(upload_to='post_images')
     products = models.ForeignKey(
-        ro=Products,
+        to=Products,
         on_delete=models.CASCADE,
         related_name='post_images'
     )

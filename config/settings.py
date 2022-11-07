@@ -45,8 +45,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'rest_framework_simplejwt',
+    'django_filters',
 
     'apps.account',
+    'apps.products',
 ]
 
 MIDDLEWARE = [
@@ -157,8 +159,10 @@ SIMPLE_JWT = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-    
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE':2,
+    'SEARCH_PARAM': 'q'
 }
 
 

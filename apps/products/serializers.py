@@ -28,7 +28,7 @@ class ProductSerializer(serializers.ModelSerializer):
         representation['comments'] = CommentSerializer(
             instance.comments.all(), many=True
         ).data
-        rating = instance.ratings.aggregate(Avg('rating'))['rating_avg']
+        rating = instance.ratings.aggregate(Avg('rating'))['rating__avg']
         representation['likes'] = instance.likes.all().count()
         representation['liked_by'] = LikeSerializer(
             instance.likes.all().only('user'), many=True).data
